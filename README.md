@@ -1,3 +1,5 @@
+![](./Images/AgneticIdentity.jpg)
+
 # **Agent Identity & Lifecycle Framework (AILF)**  
 ### *A Federated Identity, Accountability, and Lifecycle System for Autonomous Agent Swarms*
 
