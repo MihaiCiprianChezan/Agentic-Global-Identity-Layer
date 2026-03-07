@@ -118,7 +118,7 @@ The "agents are not replicas" principle is new since the original AILF specifica
 ---
 
 ### **Layer 3: Cryptographic Anchor (Immutable Proof)**
-- [SPIFFE SVID](https://spiffe.io/docs/latest/spiffe-about/svid/) (X.509 or JWT format), short-lived, automatically rotated
+- [SPIFFE SVID](https://spiffe.io/docs/latest/deploying/svids/) (X.509 or JWT format), short-lived, automatically rotated
 - Anchored to SPIFFE trust domain or blockchain/append-only ledger for cross-organizational proof
 - Used only for: high-risk operations, cross-registry identity federation, A2A Agent Card signing, cross-organizational delegation, EU AI Act-relevant audit events
 - Never required for internal spawning or low-risk tasks
@@ -164,7 +164,7 @@ graph TB
         Root["Trust Domain Roots<br/>Registry Operators<br/>Cross-org Federation"]
     end
     
-    subgraph T2["Tier 2: Regional Registries (High-throughput)"]
+    subgraph T2["Tier 2: Regional Reg.(High-throughput)"]
         Reg1["Domain Registry A<br/>Lineage + Permissions<br/>Reputation + Lifecycle"]
         Reg2["Domain Registry B<br/>Jurisdiction-scoped<br/>EU AI Act logging"]
     end
@@ -203,7 +203,7 @@ The lifecycle model solves the core NHI governance problem: **identity without l
 ### **State 2: Provisional Agent**
 - Own audit trail begins
 - Still constrained, cannot spawn
-- Eligible for cryptographic anchoring ([Layer 3 SVID](https://spiffe.io/docs/latest/spiffe-about/svid/) issued)
+- Eligible for cryptographic anchoring ([Layer 3 SVID](https://spiffe.io/docs/latest/deploying/svids/) issued)
 - SVID lifetime: standard (hours)
 - **Behavioral baseline established in this state** — reputation scoring begins here
 
@@ -244,19 +244,19 @@ stateDiagram-v2
     [*] --> Bound: Spawn by parent
 
     Bound --> Provisional: Time + behavior threshold
-    Provisional --> Autonomous: Promotion criteria met\n(behavioral + cryptographic)
+    Provisional --> Autonomous: Promotion criteria met<br/>(behavioral + cryptographic)
     Autonomous --> Supervisory: Acquires dependents
     Supervisory --> Autonomous: All dependents archived
     
     Autonomous --> Archived: Retirement / revocation
-    Supervisory --> Archived: Emergency revocation\n(cascades to dependents)
+    Supervisory --> Archived: Emergency revocation<br/>(cascades to dependents)
     Provisional --> Archived: Violation / timeout
-    Bound --> [*]: Task complete (ephemeral)\nor Archived (persistent)
+    Bound --> [*]: Task complete (ephemeral)<br/>or Archived (persistent)
 
-    note right of Bound: No spawn, no external ops\nPermissions ⊆ parent
-    note right of Provisional: SVID issued\nAudit trail begins
-    note right of Autonomous: A2A Agent Card eligible\nCan spawn bound agents
-    note right of Archived: Identity preserved\nAudit immutable\nEU AI Act retention
+    note right of Bound: No spawn, no external ops<br/>Permissions ⊆ parent
+    note right of Provisional: SVID issued<br/>Audit trail begins
+    note right of Autonomous: A2A Agent Card eligible<br/>Can spawn bound agents
+    note right of Archived: Identity preserved<br/>Audit immutable<br/>EU AI Act retention
 ```
 
 ---
@@ -276,9 +276,9 @@ Promotion is not a reward — it is a **risk decision**. The system must be cons
 | Behavioral entropy | Non-determinism stability | Cross-agent correlation to detect coordinated gaming |
 | A2A interaction quality | Trust behavior in multi-agent chains | Cross-registry verification of counterparty reports |
 
-### **New in 2026: Reasoning Model Adjustment**
+### **Reasoning Model Adjustment**
 
-Reasoning models ([o3](https://openai.com/o3), [Gemini 2.5](https://deepmind.google/technologies/gemini/), [Claude 3.7+](https://www.anthropic.com/claude)) exhibit different behavioral patterns than prior-generation models. Promotion pipelines must account for:
+Reasoning models exhibit different behavioral patterns than prior-generation models. Promotion pipelines must account for:
 - Higher behavioral variance per task (reasoning models are more exploratory)
 - More sophisticated justification of actions (does not equal trustworthiness)
 - Potential for coordinated multi-session gaming by an adversarially prompted agent
@@ -355,7 +355,7 @@ jit_access:
 - Atomic issuance (registry transaction is atomic)
 - Deterministic lineage (parent → child chain is immutable)
 - Permission validation (against parent ceiling)
-- [SPIFFE SVID](https://spiffe.io/docs/latest/spiffe-about/svid/) issuance (Layer 3 for Provisional+)
+- [SPIFFE SVID](https://spiffe.io/docs/latest/deploying/svids/) issuance (Layer 3 for Provisional+)
 - [A2A Agent Card](https://github.com/google/A2A) generation (for Autonomous+, with signing)
 
 ### **Failure Modes**
@@ -391,7 +391,7 @@ This section is new in v2.0 and reflects the production reality of March 2026.
 ```
 
 When an orchestrator agent receives this card:
-1. Validates [SPIFFE SVID](https://spiffe.io/docs/latest/spiffe-about/svid/) against known trust domain
+1. Validates [SPIFFE SVID](https://spiffe.io/docs/latest/deploying/svids/) against known trust domain
 2. Verifies card signature ([A2A](https://github.com/google/A2A) v0.3+ signed cards)
 3. Checks AILF lifecycle state — Bound agents cannot accept A2A tasks
 4. Validates permission_ceiling against requested task scope
@@ -490,7 +490,7 @@ Revocation must be **surgical, not catastrophic**. The 2025 NHI incident pattern
 - Used for: scope violations, anomalous behavior, policy change
 
 **Tier 2: Cryptographic Revocation**
-- Invalidate [SPIFFE SVID](https://spiffe.io/docs/latest/spiffe-about/svid/) and all derived tokens
+- Invalidate [SPIFFE SVID](https://spiffe.io/docs/latest/deploying/svids/) and all derived tokens
 - Block new SVID issuance for this agent
 - A2A Agent Card marked as revoked in registry
 - Existing in-flight A2A tasks receive termination signal
@@ -577,7 +577,7 @@ AILF governance is designed to operate within the emerging standards ecosystem:
 As of 2026, regulatory pressure is extending to NHIs explicitly:
 
 - The [EU AI Act](https://artificialintelligenceact.eu/)'s transparency and human oversight requirements implicitly require agent identity infrastructure
-- [NIST AI RMF](https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf) requires threat modeling for agentic systems, which requires identity
+- [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework/ai-rmf-development) requires threat modeling for agentic systems, which requires identity
 - [ISO 42001](https://www.iso.org/standard/81230.html) risk assessments for agentic deployments require identity-based attribution
 - [SOC 2](https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2) audits increasingly include NHI lifecycle questions
 
@@ -605,7 +605,7 @@ This section is new in v2.0, reflecting documented 2025–2026 incidents.
 
 **Attack**: Malicious agent presents a fake [Agent Card](https://github.com/google/A2A) claiming Autonomous AILF lifecycle state to gain access to operations requiring that trust level.
 
-**AILF Defense**: Agent Cards must be signed (Layer 3 [SPIFFE SVID](https://spiffe.io/docs/latest/spiffe-about/svid/)). Registry validates SVID against trust domain. Lifecycle state claim is cryptographically bound to the SVID, not self-asserted. Unsigned cards treated as Bound-equivalent (maximum restriction).
+**AILF Defense**: Agent Cards must be signed (Layer 3 [SPIFFE SVID](https://spiffe.io/docs/latest/deploying/svids/)). Registry validates SVID against trust domain. Lifecycle state claim is cryptographically bound to the SVID, not self-asserted. Unsigned cards treated as Bound-equivalent (maximum restriction).
 
 ### **Threat 4: Promotion Gaming by Reasoning Models**
 
@@ -747,7 +747,7 @@ The problem AILF was designed to solve has arrived. The standards ecosystem that
 
 **Layer 2 Registry ID**: AILF per-instance operational identity. Hash-based, sub-100ms issuance, instance-scoped (not type-scoped).
 
-**Layer 3 Cryptographic Anchor**: AILF's cryptographic identity layer. Built on [SPIFFE SVIDs](https://spiffe.io/docs/latest/spiffe-about/svid/). Short-lived, auto-rotating.
+**Layer 3 Cryptographic Anchor**: AILF's cryptographic identity layer. Built on [SPIFFE SVIDs](https://spiffe.io/docs/latest/deploying/svids/). Short-lived, auto-rotating.
 
 **NHI (Non-Human Identity)**: Any digital identity operating without direct human control — service accounts, API keys, AI agents. AILF is specifically designed for the AI agent subset of NHIs.
 
@@ -759,7 +759,7 @@ The problem AILF was designed to solve has arrived. The standards ecosystem that
 
 **[SPIRE](https://spiffe.io/docs/latest/spire-about/)**: SPIFFE Runtime Environment. Production implementation of SPIFFE APIs. Issues and rotates SVIDs.
 
-**[SVID](https://spiffe.io/docs/latest/spiffe-about/svid/)**: SPIFFE Verifiable Identity Document. Short-lived X.509 certificate or JWT carrying a SPIFFE ID. The cryptographic primitive AILF uses for Layer 3.
+**[SVID](https://spiffe.io/docs/latest/deploying/svids/)**: SPIFFE Verifiable Identity Document. Short-lived X.509 certificate or JWT carrying a SPIFFE ID. The cryptographic primitive AILF uses for Layer 3.
 
 **[WIMSE](https://datatracker.ietf.org/wg/wimse/about/)**: Workload Identity in Multi-System Environments. IETF working group standardizing workload identity across multi-platform deployments. Active draft ([arch-07, March 2026](https://datatracker.ietf.org/doc/draft-ietf-wimse-arch/)). AI Agent applicability draft active.
 
@@ -886,7 +886,7 @@ Neither replaces the other. A fully governed agentic deployment requires both.
 | OmniGPT breach | https://hackread.com/omnigpt-ai-chatbot-breach-hacker-leak-user-data-messages/ |
 | Salesloft-Drift (Cloudflare writeup) | https://blog.cloudflare.com/response-to-salesloft-drift-incident/ |
 | CrowdStrike/SGNL acquisition | https://www.crowdstrike.com/en-us/press-releases/crowdstrike-to-acquire-sgnl-to-transform-identity-security-for-ai-era/ |
-| NIST AI RMF | https://www.nist.gov/system/files/documents/2023/01/26/AI%20RMF%201.0.pdf |
+| NIST AI RMF | https://www.nist.gov/itl/ai-risk-management-framework/ai-rmf-development |
 | ISO 42001 | https://www.iso.org/standard/81230.html |
 | Kubernetes Service Accounts | https://kubernetes.io/docs/concepts/security/service-accounts/ |
 | NHI Breaches tracker | https://nhimg.org/nhi-breaches |
