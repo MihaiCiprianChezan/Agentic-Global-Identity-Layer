@@ -890,3 +890,9 @@ Neither replaces the other. A fully governed agentic deployment requires both.
 | ISO 42001 | https://www.iso.org/standard/81230.html |
 | Kubernetes Service Accounts | https://kubernetes.io/docs/concepts/security/service-accounts/ |
 | NHI Breaches tracker | https://nhimg.org/nhi-breaches |
+
+---
+
+*Proposed for industry discussion and collaborative refinement. The goal is to establish shared principles enabling safe, capable, and trustworthy persistent AI agents.*
+
+*The underlying framework represents original architectural thinking independent of any specific organizational deployment.*
