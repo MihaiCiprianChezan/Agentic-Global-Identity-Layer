@@ -164,7 +164,7 @@ graph TB
         Root["Trust Domain Roots<br/>Registry Operators<br/>Cross-org Federation"]
     end
     
-    subgraph T2["Tier 2: Regional Reg.(High-throughput)"]
+    subgraph T2["Tier 2: Regional Registry"]
         Reg1["Domain Registry A<br/>Lineage + Permissions<br/>Reputation + Lifecycle"]
         Reg2["Domain Registry B<br/>Jurisdiction-scoped<br/>EU AI Act logging"]
     end
