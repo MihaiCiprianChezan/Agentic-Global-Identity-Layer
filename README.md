@@ -3,8 +3,8 @@
 # **Agent Identity & Lifecycle Framework (AILF)**
 ### *A Federated Identity, Accountability, and Lifecycle System for Autonomous Agent Swarms*
 
-> **Version 2.0 — March 2026**
-> Comprehensively updated to reflect: [IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/) working group (draft-ietf-wimse-arch-07, March 2026) and AI Agent Identity applicability draft; [SPIFFE/SPIRE](https://spiffe.io/) extension requirements for non-deterministic agents; [A2A](https://github.com/google/A2A) Agent Card signing and identity propagation; the NHI (Non-Human Identity) governance crisis as documented in production 2025 incidents; [EU AI Act](https://artificialintelligenceact.eu/) obligations; and the convergence of workload identity, zero trust, and agentic AI in enterprise security.
+> **Version 2.1 — July 2026**
+> Updated for: [IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/) architecture **draft-ietf-wimse-arch-08 (6 July 2026)** and the **[WIMSE AI Agent applicability draft -02 (28 Feb 2026)](https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/)** (Owner binding + Dual-Identity Credentials); **[A2A v1.0 stable](https://a2a-protocol.org/latest/)** (Linux Foundation, April 2026 — signed Agent Cards now standard, multi-tenancy, and the AP2 payments protocol); the **MCP 2026-07-28 specification** (stateless core, protocol-level token audience binding; final spec due 28 July 2026); the **Digital Omnibus on AI** (Council approval 29 June 2026) redrawing the EU AI Act high-risk timeline; and the **2026 agentic-breach wave** that turned this framework's central prediction into documented fact. Retains the v2.0 coverage of [SPIFFE/SPIRE](https://spiffe.io/) extension requirements for non-deterministic agents, the NHI (Non-Human Identity) governance crisis, and the convergence of workload identity, zero trust, and agentic AI in enterprise security.
 
 ---
 
@@ -15,7 +15,7 @@
 - Lifecycle states and promotion rules
 - Permission boundaries and inheritance, with zero-escalation enforcement
 - Auditability and revocation hooks at sub-100ms operational speed
-- Protocol-layer identity propagation for [MCP](https://modelcontextprotocol.io/), [A2A](https://github.com/google/A2A), and [ANP](https://github.com/agent-network-protocol/AgentNetworkProtocol) ecosystems
+- Protocol-layer identity propagation for [MCP](https://modelcontextprotocol.io/), [A2A](https://github.com/a2aproject/A2A), and [ANP](https://github.com/agent-network-protocol/AgentNetworkProtocol) ecosystems
 - Integration path with emerging [IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/) workload identity standards
 
 ### **What AILF Does *Not* Dictate**
@@ -26,53 +26,65 @@
 - A replacement for [SPIFFE](https://spiffe.io/), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/), or [OAuth 2.1](https://oauth.net/2.1/) (AILF builds on them)
 
 **Explanation**
-AILF is infrastructure, not ideology. It defines the minimal, interoperable substrate required for safe, accountable agent swarms — the equivalent of TCP/IP for agent identity. The protocol ecosystem of 2026 ([MCP](https://modelcontextprotocol.io/), [A2A](https://github.com/google/A2A), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/), [SPIFFE](https://spiffe.io/)) provides the communication and attestation primitives; AILF provides the lifecycle governance and agent-specific identity model that these standards do not yet address. It avoids prescribing governance, economics, or legal doctrine because those must evolve across jurisdictions and industries.
+AILF is infrastructure, not ideology. It defines the minimal, interoperable substrate required for safe, accountable agent swarms — the equivalent of TCP/IP for agent identity. The protocol ecosystem of 2026 ([MCP](https://modelcontextprotocol.io/), [A2A](https://github.com/a2aproject/A2A), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/), [SPIFFE](https://spiffe.io/)) provides the communication and attestation primitives; AILF provides the lifecycle governance and agent-specific identity model that these standards do not yet address. It avoids prescribing governance, economics, or legal doctrine because those must evolve across jurisdictions and industries.
 
 ---
 
 ## **1. The Problem**
 
-### **Current Reality (March 2026)**
+### **Current Reality (July 2026)**
 
-The NHI (Non-Human Identity) governance crisis has arrived. By March 2026:
+The NHI (Non-Human Identity) governance crisis has arrived — and in the months since this framework's v2.0, the predicted consequences have materialized. As of mid-2026:
 
 - NHIs outnumber human identities **25–50x** in modern enterprises, with the ratio accelerating
 - **97% of NHIs have excessive privileges** ([Entro Security, 2025 State of NHIs](https://entrosecurity.com/))
 - Just **0.01% of machine identities control 80%** of cloud resources
 - **78% of organizations** have no formal policies for creating or removing AI agent identities
 - **92% are not confident** their legacy IAM tools can manage AI/NHI risks
-- Q4 2025 agent incidents ([LangChain CVE-2025-68664](https://nvd.nist.gov/vuln/detail/CVE-2025-68664), [Langflow RCE CVE-2025-3248](https://nvd.nist.gov/vuln/detail/CVE-2025-3248), [OmniGPT credential leak](https://hackread.com/omnigpt-ai-chatbot-breach-hacker-leak-user-data-messages/)) demonstrated full kill chains where the exploit was poor NHI governance — not advanced malware
+- **65% of organizations report at least one AI-agent-caused security incident** in the past year ([Kiteworks, 2026](https://www.kiteworks.com/cybersecurity-risk-management/ai-agent-security-incidents-2026/)); the **2026 Verizon DBIR frames identity as the control plane for agentic AI** ([Token Security analysis](https://www.token.security/blog/the-2026-data-breach-investigations-report-confirms-it-identity-is-the-control-plane-for-agentic-ai))
+- 2025 agent incidents ([LangChain CVE-2025-68664](https://nvd.nist.gov/vuln/detail/CVE-2025-68664), [Langflow RCE CVE-2025-3248](https://nvd.nist.gov/vuln/detail/CVE-2025-3248), [OmniGPT credential leak](https://hackread.com/omnigpt-ai-chatbot-breach-hacker-leak-user-data-messages/)) demonstrated full kill chains where the exploit was poor NHI governance — not advanced malware
 
-Multi-agent systems are production reality. Agent spawning is cheap and effectively unbounded. [A2A](https://github.com/google/A2A) enables agent-to-agent delegation across organizational boundaries. [MCP](https://modelcontextprotocol.io/) connects agents to tools at scale. But **existing identity systems authenticate tools, not agents** — and current workload identity frameworks ([SPIFFE](https://spiffe.io/), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/)) treat all replicas as identical, which is a fundamental mismatch for non-deterministic AI agents.
+Multi-agent systems are production reality. Agent spawning is cheap and effectively unbounded. [A2A](https://a2a-protocol.org/latest/) — now v1.0 stable under the Linux Foundation — enables agent-to-agent delegation across organizational boundaries. [MCP](https://modelcontextprotocol.io/) connects agents to tools at scale. But **existing identity systems authenticate tools, not agents** — and current workload identity frameworks ([SPIFFE](https://spiffe.io/), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/)) treat all replicas as identical, which is a fundamental mismatch for non-deterministic AI agents.
 
 **The world has reached the exact inflection point AILF was designed to address.**
+
+### **The Prediction Landed (2026)**
+
+AILF v2.0 (March 2026) cited industry forecasts that 2026 would see "the first major breach traced to an over-privileged AI agent." By July 2026, that is no longer a forecast — it is a documented pattern:
+
+- **Empirical validation of the core invariant**: Teleport's 2026 research measured a **4.5× higher incident rate** in organizations running over-privileged AI systems versus those enforcing least-privilege controls — close to a direct empirical proof of AILF's permission-inheritance thesis (§8).
+- **Agent-driven state-scale intrusions**: a single actor used agentic coding tools to breach **nine Mexican government agencies** (~195M taxpayer records; Dec 2025–Feb 2026), and the **GTG-1002** campaign ran espionage against ~30 targets with AI handling **80–90% of tactical operations** autonomously — the first documented cyberattack largely executed without human intervention at scale.
+- **Marketplace and platform failures**: the **ClawHub** skill-marketplace campaign (824 malicious skills by mid-Feb 2026, four critical CVEs) and the **Moltbook** platform breach (1.5M autonomous agents managed by 17,000 humans, with an unsecured database that let anyone hijack any agent) are exactly the "opaque swarm, no per-instance accountability" failure mode AILF was designed to prevent.
+
+The common thread across all of these is the absence of the three things AILF makes structural: **per-instance identity, lifecycle-bounded privilege, and cascade-capable revocation.** The market has now confirmed the problem empirically, not just architecturally — and [CrowdStrike's acquisition of SGNL in January 2026](https://www.crowdstrike.com/en-us/press-releases/crowdstrike-to-acquire-sgnl-to-transform-identity-security-for-ai-era/) (~$740M, for continuous identity evaluation of NHIs and AI agents) is the vendor market pricing that confirmation in.
 
 ### **Systemic Risks (Confirmed in Production)**
 - Accountability collapses at scale — attribution is absent from most A2A chains
 - Compliance becomes retroactive and brittle under [EU AI Act](https://artificialintelligenceact.eu/) pressure
 - Security incidents are non-attributable — the 2025 [EchoLeak (CVE-2025-32711)](https://nvd.nist.gov/vuln/detail/CVE-2025-32711) and [Salesloft-Drift OAuth supply chain attack](https://blog.cloudflare.com/response-to-salesloft-drift-incident/) showed that compromised NHI credentials produce full kill chains at machine speed
 - Human operators become bottlenecks when governance requires manual review at agent scale
-- [One Identity](https://www.oneidentity.com/) predicts **2026 will see the first major breach traced to an over-privileged AI agent** — and it will look like the system doing what it was designed to do
+- [One Identity](https://www.oneidentity.com/) predicted **2026 would see the first major breach traced to an over-privileged AI agent** — and it would look like the system doing what it was designed to do. By mid-2026, that prediction had been confirmed multiple times over (see *The Prediction Landed* above); the "system doing what it was designed to do" framing proved exactly right — the intrusions used legitimate agent credentials operating within granted, over-broad scopes
 
 **Explanation**
 The gap between "agent spawning is cheap" and "agent identity governance is mature" is now a production liability, not a theoretical concern. [CrowdStrike acquired SGNL in January 2026](https://www.crowdstrike.com/en-us/press-releases/crowdstrike-to-acquire-sgnl-to-transform-identity-security-for-ai-era/) specifically to deliver continuous identity evaluation for NHIs and AI agents. The market has confirmed the problem. AILF provides the architectural framework for solving it.
 
 ---
 
-## **2. The Standards Landscape (March 2026)**
+## **2. The Standards Landscape (July 2026)**
 
-AILF does not operate in isolation. It is designed to sit above an emerging stack of workload identity standards that are actively converging:
+AILF does not operate in isolation. It is designed to sit above an emerging stack of workload identity standards that are actively converging — and that convergence accelerated markedly in the first half of 2026:
 
 | Standard | Status | What It Provides | AILF Relationship |
 |----------|--------|-----------------|-------------------|
 | **[SPIFFE / SPIRE](https://spiffe.io/)** | [CNCF](https://www.cncf.io/) Graduated | Cryptographically verifiable workload identity (SVIDs), short-lived X.509/JWT credentials, federation across trust domains | AILF Layer 3 (Cryptographic Anchor) builds on SPIFFE. Layer 2 (Registry ID) extends SPIFFE with agent-specific instance identity. |
-| **[IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/)** | Active draft ([arch-07, March 2026](https://datatracker.ietf.org/doc/draft-ietf-wimse-arch/)) | Workload identity across multi-system environments, token exchange at security boundaries, AI agent applicability draft active | AILF's trust domain model is WIMSE-compatible. WIMSE token exchange maps to AILF's cross-registry boundary crossing. |
-| **[WIMSE AI Agent Draft](https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/)** | Active IETF I-D | Applying WIMSE architecture to AI agent identity and credential management, binding agent identity to user identity | AILF's lifecycle model and promotion pipeline extend what the WIMSE AI agent draft defines for bootstrapping. |
-| **[OAuth 2.1](https://oauth.net/2.1/) + [RFC 8707](https://www.rfc-editor.org/rfc/rfc8707)** | RFC / MCP mandatory | Short-lived token delegation, Resource Indicators for MCP servers | AILF Tier 2 credentials use OAuth 2.1. Cross-registry credential exchange uses RFC 8707 audience binding. |
-| **[A2A Agent Cards](https://github.com/google/A2A)** | v0.3+ signed | Agent capability advertisement, authentication handshake | AILF Registry ID is the identity backing A2A Agent Cards. Signed Agent Cards require a Layer 3 anchor. |
+| **[IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/)** | Active draft ([arch-08, 6 July 2026](https://datatracker.ietf.org/doc/draft-ietf-wimse-arch/)) | Workload identity across multi-system environments, token exchange at security boundaries; companion workload-creds and identifier drafts advancing | AILF's trust domain model is WIMSE-compatible. WIMSE token exchange maps to AILF's cross-registry boundary crossing. The arch document is expected to advance toward RFC over 2026–2027. |
+| **[WIMSE AI Agent Draft](https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/)** | I-D **-02 (28 Feb 2026)**, Informational | Independent AI agent identity + credential management. Introduces an **"Owner"** (entity that cryptographically binds an agent to a responsible principal) and a **"Dual-Identity Credential"** (carrying both agent and owner keys, bound to both) | Strong overlap with AILF. The Owner maps to AILF's parent/lineage authority; the Dual-Identity Credential is a natural carrier for an AILF Layer 2 Registry ID + Layer 3 anchor. AILF's lifecycle model and promotion pipeline extend what this draft defines for bootstrapping. |
+| **[OAuth 2.1](https://oauth.net/2.1/) + [RFC 8707](https://www.rfc-editor.org/rfc/rfc8707)** | RFC / MCP mandatory | Short-lived token delegation, Resource Indicators for MCP servers | AILF Tier 2 credentials use OAuth 2.1. Cross-registry credential exchange uses RFC 8707 audience binding — reinforced by MCP 2026-07-28's protocol-level token audience binding. |
+| **[A2A](https://a2a-protocol.org/latest/)** | **v1.0 stable** (Linux Foundation, April 2026) | Agent capability advertisement, authentication handshake; **signed Agent Cards now standard**, multi-tenant endpoints, and the **AP2 payments protocol** | AILF Registry ID is the identity backing A2A Agent Cards. Signed cards require a Layer 3 anchor. Multi-tenant endpoints make per-instance identity disambiguation (Layer 2) more important, not less; AP2 makes verified identity a precondition for agent-initiated payments. |
+| **[Broader IETF agent-identity work](https://datatracker.ietf.org/wg/wimse/documents/)** | Multiple early I-Ds | Cross-organizational delegation, DNS-based entity discovery, alternative agent-identity protocols (e.g. VAIP, aiagent-auth) | The design space is now crowded and moving fast. AILF stays deliberately protocol-agnostic above this layer, consuming whichever identity/credential primitives win. |
 | **[ANP](https://github.com/agent-network-protocol/AgentNetworkProtocol) / [DID](https://www.w3.org/TR/did-core/)** | Early adoption | Decentralized identifiers for open-internet agent discovery | AILF Layer 3 can anchor to DIDs for cross-organizational open-internet identity. |
 
-**The critical gap all of these leave**: None of them define agent lifecycle states, promotion policies, spawn-time permission inheritance enforcement, or the governance rules for when an agent-class identity should be elevated, revoked, or archived. That is AILF's unique contribution.
+**The critical gap all of these leave**: Even the WIMSE AI Agent draft — the closest to AILF's concerns, and now defining Owner binding and Dual-Identity Credentials — stops at *establishing* and *binding* identity. None of these standards define agent **lifecycle states, promotion policies, spawn-time permission inheritance enforcement**, or the governance rules for when an agent-class identity should be elevated, revoked, or archived. That is AILF's unique contribution, and the -02 draft's Owner/Dual-Identity model gives AILF a cleaner standards substrate to bolt its lifecycle layer onto.
 
 ---
 
@@ -111,7 +123,7 @@ The "agents are not replicas" principle is new since the original AILF specifica
 - **[SPIFFE](https://spiffe.io/)-extended format**: `spiffe://trust-domain/agent-type/instance-id`
   - Example: `spiffe://acme.com/ns/trading/sa/trading-agent-sa/instance/001`
   - Each agent *instance* gets a unique identifier — not each agent *type*
-- **[A2A](https://github.com/google/A2A) integration**: Layer 2 Registry ID is the identity behind A2A Agent Card `agentId`. Unsigned Agent Cards cannot carry a verified AILF Layer 2 identity.
+- **[A2A](https://github.com/a2aproject/A2A) integration**: Layer 2 Registry ID is the identity behind A2A Agent Card `agentId`. Unsigned Agent Cards cannot carry a verified AILF Layer 2 identity.
 
 **This is the layer that makes swarms workable.** It enables per-instance permission checks, lineage tracking, rate limiting, and behavioral reputation without touching slow cryptographic systems for every operation.
 
@@ -213,7 +225,7 @@ The lifecycle model solves the core NHI governance problem: **identity without l
 - Independent Registry ID and [SPIFFE](https://spiffe.io/) trust domain entry
 - Independent permissions (within parent ceiling)
 - Can spawn Bound/Provisional agents
-- Eligible for [A2A Agent Card](https://github.com/google/A2A) with verified identity
+- Eligible for [A2A Agent Card](https://github.com/a2aproject/A2A) with verified identity
 - SVID lifetime: standard, with automatic rotation
 - **2026 context**: The transition to Autonomous is the critical governance gate. It is where the "agent has an identity" claim becomes meaningful for compliance and accountability.
 
@@ -356,7 +368,7 @@ jit_access:
 - Deterministic lineage (parent → child chain is immutable)
 - Permission validation (against parent ceiling)
 - [SPIFFE SVID](https://spiffe.io/docs/latest/deploying/svids/) issuance (Layer 3 for Provisional+)
-- [A2A Agent Card](https://github.com/google/A2A) generation (for Autonomous+, with signing)
+- [A2A Agent Card](https://github.com/a2aproject/A2A) generation (for Autonomous+, with signing)
 
 ### **Failure Modes**
 
@@ -373,11 +385,11 @@ jit_access:
 
 ## **10. A2A and MCP Identity Integration**
 
-This section is new in v2.0 and reflects the production reality of March 2026.
+This section reflects the production reality of mid-2026: [A2A](https://a2a-protocol.org/latest/) reached **v1.0 stable** under the Linux Foundation (April 2026), with signed Agent Cards now standard and multi-tenant endpoints in scope, and [MCP](https://modelcontextprotocol.io/)'s **2026-07-28** revision hardened authorization with protocol-level token audience binding.
 
 ### **AILF Identity in A2A Flows**
 
-[A2A Agent Cards](https://github.com/google/A2A) carry agent capability metadata. With AILF, they also carry a verified identity claim:
+[A2A Agent Cards](https://github.com/a2aproject/A2A) carry agent capability metadata. With AILF, they also carry a verified identity claim:
 
 ```json
 {
@@ -392,14 +404,14 @@ This section is new in v2.0 and reflects the production reality of March 2026.
 
 When an orchestrator agent receives this card:
 1. Validates [SPIFFE SVID](https://spiffe.io/docs/latest/deploying/svids/) against known trust domain
-2. Verifies card signature ([A2A](https://github.com/google/A2A) v0.3+ signed cards)
+2. Verifies card signature (signed Agent Cards are standard in [A2A](https://github.com/a2aproject/A2A) v1.0; on multi-tenant endpoints the signature also disambiguates *which* tenant agent issued the card)
 3. Checks AILF lifecycle state — Bound agents cannot accept A2A tasks
 4. Validates permission_ceiling against requested task scope
 5. Logs interaction to AILF audit trail with cross-agent attribution
 
 ### **AILF Identity in MCP Flows**
 
-[MCP](https://modelcontextprotocol.io/) servers, as OAuth Resource Servers ([Nov 2025 spec](https://modelcontextprotocol.io/specification/2025-11-05)), can require AILF-backed agent identity:
+[MCP](https://modelcontextprotocol.io/) servers, as OAuth Resource Servers ([Nov 2025 spec](https://modelcontextprotocol.io/specification/2025-11-05), with the **2026-07-28** revision adding a stateless core and protocol-level token audience binding), can require AILF-backed agent identity. The stateless-core direction is favorable for AILF: when each MCP request is self-contained rather than pinned to a server session, an AILF registry can attach and verify the caller's identity claim per request at a policy gateway.
 
 ```yaml
 mcp_identity_requirements:
@@ -538,9 +550,9 @@ AILF governance is designed to operate within the emerging standards ecosystem:
 
 **[Linux Foundation](https://www.linuxfoundation.org/) / AAIF**: MCP governance. AILF registries integrate with MCP server allowlists.
 
-**[Linux Foundation](https://www.linuxfoundation.org/) / A2A project**: [A2A](https://github.com/google/A2A) protocol governance. AILF Agent Card identity claims follow A2A specification.
+**[Linux Foundation](https://www.linuxfoundation.org/) / A2A project**: [A2A](https://github.com/a2aproject/A2A) protocol governance. AILF Agent Card identity claims follow A2A specification.
 
-**[IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/)**: Active standardization of workload identity ([draft-ietf-wimse-arch-07, March 2026](https://datatracker.ietf.org/doc/draft-ietf-wimse-arch/)). AILF's cross-registry token exchange follows WIMSE patterns. The [WIMSE AI Agent applicability draft](https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/) overlaps significantly with AILF's Layer 2 and lifecycle model — AILF should be considered a lifecycle extension of WIMSE.
+**[IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/)**: Active standardization of workload identity ([draft-ietf-wimse-arch-08, 6 July 2026](https://datatracker.ietf.org/doc/draft-ietf-wimse-arch/), expected to advance toward RFC over 2026–2027). AILF's cross-registry token exchange follows WIMSE patterns. The [WIMSE AI Agent applicability draft -02](https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/) now defines an **Owner** and a **Dual-Identity Credential** — which overlap significantly with AILF's parent/lineage authority and Layer 2/3 identity. AILF should be considered a lifecycle extension of WIMSE: it consumes the draft's Owner-bound, dual-identity credentials and adds the lifecycle states, promotion gates, and permission-inheritance enforcement the draft does not define.
 
 **[CNCF](https://www.cncf.io/) / [SPIFFE](https://spiffe.io/)**: AILF Layer 3 is a direct extension of SPIFFE SVIDs for per-instance agent identity.
 
@@ -555,15 +567,19 @@ AILF governance is designed to operate within the emerging standards ecosystem:
 
 ## **14. Privacy & Compliance**
 
-### **EU AI Act Alignment**
+### **EU AI Act Alignment (post-Digital Omnibus)**
 
-| [EU AI Act](https://artificialintelligenceact.eu/) Obligation | AILF Mechanism |
-|---------------------|----------------|
-| [Art. 14](https://artificialintelligenceact.eu/article/14/) — Human oversight | Lifecycle promotion gates require human review at Autonomous threshold |
-| [Art. 12](https://artificialintelligenceact.eu/article/12/) — Record-keeping | Per-instance audit trail, immutable after Archived state |
-| [Art. 9](https://artificialintelligenceact.eu/article/9/) — Risk management | Lifecycle state model encodes risk tier; higher states require stronger governance |
-| [Art. 16](https://artificialintelligenceact.eu/article/16/) — Technical documentation | Registry export provides complete agent lineage documentation |
-| [Art. 50](https://artificialintelligenceact.eu/article/50/) — Transparency | Agent identity is disclosed in A2A interactions; Bound agents cannot impersonate humans |
+The **Digital Omnibus on AI** (provisional agreement 7 May 2026; Council final approval 29 June 2026) restructured the AI Act's application dates without changing its substance. For AILF this matters in two ways: **Article 50 transparency still applies from 2 August 2026**, while the **high-risk regime — including Article 14 human oversight — moves to 2 December 2027** (product-embedded high-risk: 2 August 2028). Critically, the deferral is paired with a **high-risk registration database** the AI Office is standing up, plus expanded investigatory powers including on-site inspections — a registration mechanism that a registry-based identity framework like AILF maps onto directly.
+
+| [EU AI Act](https://artificialintelligenceact.eu/) Obligation | Applies from | AILF Mechanism |
+|---------------------|----------|----------------|
+| [Art. 50](https://artificialintelligenceact.eu/article/50/) — Transparency | **2 Aug 2026** (not deferred) | Agent identity is disclosed in A2A interactions; Bound agents cannot impersonate humans |
+| [Art. 14](https://artificialintelligenceact.eu/article/14/) — Human oversight | **2 Dec 2027** (high-risk, deferred) | Lifecycle promotion gates require human review at Autonomous threshold |
+| [Art. 12](https://artificialintelligenceact.eu/article/12/) — Record-keeping | 2 Dec 2027 (high-risk) | Per-instance audit trail, immutable after Archived state |
+| [Art. 9](https://artificialintelligenceact.eu/article/9/) — Risk management | 2 Dec 2027 (high-risk) | Lifecycle state model encodes risk tier; higher states require stronger governance |
+| [Art. 16](https://artificialintelligenceact.eu/article/16/) — Technical documentation | 2 Dec 2027 (high-risk) | Registry export provides complete agent lineage documentation; supports the new high-risk registration database |
+
+The split clock is an argument *for* AILF, not against its urgency: the transparency obligations that bite first are exactly the ones AILF's disclosed, per-instance identity satisfies, while the longer high-risk runway gives organizations time to stand up the lifecycle and registration substrate before Dec 2027.
 
 ### **Privacy Architecture**
 - Tiered audit trails (operational layer vs. compliance layer, separately accessible)
@@ -603,7 +619,7 @@ This section is new in v2.0, reflecting documented 2025–2026 incidents.
 
 ### **Threat 3: A2A Identity Spoofing**
 
-**Attack**: Malicious agent presents a fake [Agent Card](https://github.com/google/A2A) claiming Autonomous AILF lifecycle state to gain access to operations requiring that trust level.
+**Attack**: Malicious agent presents a fake [Agent Card](https://github.com/a2aproject/A2A) claiming Autonomous AILF lifecycle state to gain access to operations requiring that trust level.
 
 **AILF Defense**: Agent Cards must be signed (Layer 3 [SPIFFE SVID](https://spiffe.io/docs/latest/deploying/svids/)). Registry validates SVID against trust domain. Lifecycle state claim is cryptographically bound to the SVID, not self-asserted. Unsigned cards treated as Bound-equivalent (maximum restriction).
 
@@ -711,19 +727,19 @@ These are active research areas. AILF does not pretend to solve them prematurely
 > **AILF is the missing lifecycle layer between workload identity primitives ([SPIFFE](https://spiffe.io/)/[WIMSE](https://datatracker.ietf.org/wg/wimse/about/)) and civilization-scale agent deployment.**
 
 **Without it**, we get:
-- Opaque swarms with no per-instance accountability
+- Opaque swarms with no per-instance accountability — the [Moltbook](https://beam.ai/agentic-insights/ai-agent-security-breaches-2026-lessons)-style platform failure
 - Zombie agents with standing privileges that become breach vectors
 - Regulatory backlash as [EU AI Act](https://artificialintelligenceact.eu/) human oversight requirements cannot be demonstrated
-- Emergency retrofits after the first major AI agent-attributed breach (predicted by [CrowdStrike](https://www.crowdstrike.com/) for 2026)
+- Emergency retrofits *after* the first major AI-agent-attributed breaches — which, as of mid-2026, have already arrived (the agent-driven government-scale intrusions and the 4.5× higher incident rate in over-privileged deployments are no longer predictions but measured outcomes)
 
 **With it**, we get:
 - Per-instance identity that makes multi-agent systems auditable
 - Lifecycle governance that prevents the zombie agent problem architecturally
 - Permission inheritance that makes privilege escalation mathematically impossible
-- Integration with [SPIFFE](https://spiffe.io/), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/), [A2A](https://github.com/google/A2A), and [MCP](https://modelcontextprotocol.io/) that fits the existing standards landscape
+- Integration with [SPIFFE](https://spiffe.io/), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/), [A2A](https://github.com/a2aproject/A2A), and [MCP](https://modelcontextprotocol.io/) that fits the existing standards landscape
 - A compliance substrate for [EU AI Act Article 14](https://artificialintelligenceact.eu/article/14/) human oversight requirements
 
-The problem AILF was designed to solve has arrived. The standards ecosystem that AILF integrates with has matured ([SPIFFE](https://spiffe.io/), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/), [A2A](https://github.com/google/A2A)). The regulatory pressure ([EU AI Act](https://artificialintelligenceact.eu/)) has set the deadline. The production incidents (2025 NHI breach wave) have confirmed the risk.
+The problem AILF was designed to solve has arrived. The standards ecosystem that AILF integrates with has matured ([SPIFFE](https://spiffe.io/), [WIMSE](https://datatracker.ietf.org/wg/wimse/about/) arch-08 + the AI-agent draft's Owner/Dual-Identity model, [A2A](https://github.com/a2aproject/A2A) v1.0). The regulatory pressure ([EU AI Act](https://artificialintelligenceact.eu/)) has set a phased clock — transparency in 2026, high-risk in 2027. The production incidents (the 2025 NHI breach wave *and* the 2026 agent-driven intrusions) have confirmed the risk empirically.
 
 **AILF is ready to move from framework to foundation.**
 
@@ -731,7 +747,13 @@ The problem AILF was designed to solve has arrived. The standards ecosystem that
 
 ## **Appendix A: Glossary**
 
-**[A2A (Agent-to-Agent Protocol)](https://github.com/google/A2A)**: Open standard for agent-to-agent communication, Linux Foundation. v0.3+ supports signed Agent Cards. AILF identity backs A2A card claims.
+**[A2A (Agent-to-Agent Protocol)](https://a2a-protocol.org/latest/)**: Open standard for agent-to-agent communication, Linux Foundation. Reached **v1.0 stable** (April 2026) with signed Agent Cards standard, multi-tenant endpoints, and the AP2 payments protocol. Repo now at `github.com/a2aproject/A2A`. AILF identity backs A2A card claims.
+
+**[AP2 (Agent Payments Protocol)](https://a2a-protocol.org/latest/)**: A2A companion protocol for agent-initiated payments (2026). Raises the stakes for verified identity: an agent transacting value is the highest-risk identity use case, and AILF's lifecycle state + permission ceiling gate what an agent is allowed to spend.
+
+**Digital Omnibus on AI**: EU simplification package amending the AI Act; Council final approval 29 June 2026. Defers the stand-alone high-risk regime (incl. Art. 14 human oversight) to 2 December 2027 and product-embedded high-risk to 2 August 2028, while leaving Article 50 transparency on 2 August 2026. Introduces a high-risk registration database and expanded AI Office investigatory powers.
+
+**Dual-Identity Credential**: Concept from the [WIMSE AI Agent draft -02](https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/). A credential carrying identifiers and public keys of both an agent and its **Owner**, cryptographically bound to both. A natural carrier for an AILF Layer 2 Registry ID plus Layer 3 anchor.
 
 **AILF**: Agent Identity & Lifecycle Framework. Lifecycle governance layer above [SPIFFE](https://spiffe.io/)/[WIMSE](https://datatracker.ietf.org/wg/wimse/about/).
 
@@ -761,7 +783,7 @@ The problem AILF was designed to solve has arrived. The standards ecosystem that
 
 **[SVID](https://spiffe.io/docs/latest/deploying/svids/)**: SPIFFE Verifiable Identity Document. Short-lived X.509 certificate or JWT carrying a SPIFFE ID. The cryptographic primitive AILF uses for Layer 3.
 
-**[WIMSE](https://datatracker.ietf.org/wg/wimse/about/)**: Workload Identity in Multi-System Environments. IETF working group standardizing workload identity across multi-platform deployments. Active draft ([arch-07, March 2026](https://datatracker.ietf.org/doc/draft-ietf-wimse-arch/)). AI Agent applicability draft active.
+**[WIMSE](https://datatracker.ietf.org/wg/wimse/about/)**: Workload Identity in Multi-System Environments. IETF working group standardizing workload identity across multi-platform deployments. Architecture draft [arch-08 (6 July 2026)](https://datatracker.ietf.org/doc/draft-ietf-wimse-arch/), advancing toward RFC over 2026–2027. The [AI Agent applicability draft -02](https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/) defines the Owner and Dual-Identity Credential concepts.
 
 **Zombie Agent**: NHI security term for an inactive, forgotten agent with persisting broad privileges. AILF's Archived state is the architectural solution to the zombie agent problem.
 
@@ -775,7 +797,7 @@ The problem AILF was designed to solve has arrived. The standards ecosystem that
 | [WIMSE](https://datatracker.ietf.org/wg/wimse/about/) (IETF draft) | Partial | No | No | No | Referenced | Yes |
 | [Kubernetes Service Accounts](https://kubernetes.io/docs/concepts/security/service-accounts/) | No (type-level) | No | No | No | No | Partial |
 | Traditional IAM ([LDAP](https://ldap.com/)/[AD](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview)) | Human-centric | No | Manual | No | No | No |
-| [A2A Agent Cards](https://github.com/google/A2A) (unsigned) | No | No | No | No | Yes | No |
+| [A2A Agent Cards](https://github.com/a2aproject/A2A) (unsigned) | No | No | No | No | Yes | No |
 | **AILF** | **Yes (per-instance)** | **5 states** | **Behavioral + human** | **Mathematical invariant** | **Yes (identity backing)** | **Yes (extension)** |
 
 ---
@@ -804,7 +826,7 @@ Neither replaces the other. A fully governed agentic deployment requires both.
 
 ---
 
-*AILF v2.0 — March 2026. Proposed for industry discussion and collaborative refinement, with contribution path toward [IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/) extension proposals.*
+*AILF v2.1 — July 2026. Proposed for industry discussion and collaborative refinement, with contribution path toward [IETF WIMSE](https://datatracker.ietf.org/wg/wimse/about/) extension proposals — in particular as a lifecycle extension of the [WIMSE AI Agent draft](https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/)'s Owner/Dual-Identity model.*
 
 *The underlying AILF framework represents original architectural thinking. The lifecycle model, per-instance identity extension of SPIFFE, and promotion pipeline are designed to fill the gap between existing workload identity primitives and the governance requirements of production agentic AI systems.*
 
@@ -812,9 +834,24 @@ Neither replaces the other. A fully governed agentic deployment requires both.
 
 ---
 
-# Fact-Check Report — AILF v2.0 (March 2026)
+# Fact-Check Report
 
-*Review conducted March 2026. All claims checked against primary sources.*
+## v2.1 Addendum (July 2026)
+
+*Re-verification conducted 11 July 2026 for the v2.1 revision. The v2.0 report below is retained as a historical record; the items here supersede it where they overlap.*
+
+- **IETF WIMSE architecture draft** — Confirmed **draft-ietf-wimse-arch-08, published 6 July 2026** (supersedes the v2.0 "arch-07, plausible/unverified" note). The architecture document is expected to advance toward RFC over 2026–2027.
+- **WIMSE AI Agent applicability draft** — Confirmed **draft-ni-wimse-ai-agent-identity-02, 28 February 2026** (Informational; expires 1 September 2026). Introduces the **Owner** and **Dual-Identity Credential** concepts now reflected in §2 and §13.
+- **A2A v1.0** — Confirmed. A2A reached **v1.0 stable** under the Linux Foundation, announced April 2026, with signed Agent Cards as standard, multi-tenant endpoints, and the AP2 payments protocol. The canonical repository is now `github.com/a2aproject/A2A` (the former `github.com/google/A2A` redirects); all in-document links updated.
+- **MCP 2026-07-28** — Confirmed as a published release candidate; final specification due 28 July 2026. Adds a stateless protocol core and protocol-level token audience binding. (Sections cite the RC; worth a re-verify after 28 July.)
+- **Digital Omnibus on AI** — Confirmed. Council final approval **29 June 2026**. Art. 50 transparency stays on 2 Aug 2026; stand-alone high-risk (incl. Art. 14) deferred to 2 Dec 2027; product-embedded high-risk to 2 Aug 2028; high-risk registration database + expanded AI Office inspection powers added.
+- **The breach prediction landed** — Confirmed. 2026 saw multiple agent-attributed intrusions (agent-driven government-scale breaches, the GTG-1002 autonomous-espionage campaign, ClawHub and Moltbook platform failures), the 2026 Verizon DBIR framing identity as the control plane for agentic AI, 65% of orgs reporting an AI-agent-caused incident, and Teleport measuring a 4.5× higher incident rate in over-privileged deployments. These are documented in §1 (*The Prediction Landed*).
+
+---
+
+## Fact-Check Report — AILF v2.0 (March 2026, historical record)
+
+*Review conducted March 2026. All claims checked against primary sources. Retained unedited; see the v2.1 Addendum above for updates.*
 
 ---
 
@@ -868,8 +905,11 @@ Neither replaces the other. A fully governed agentic deployment requires both.
 | IETF WIMSE WG | https://datatracker.ietf.org/wg/wimse/about/ |
 | WIMSE arch draft | https://datatracker.ietf.org/doc/draft-ietf-wimse-arch/ |
 | WIMSE AI Agent draft | https://datatracker.ietf.org/doc/draft-ni-wimse-ai-agent-identity/ |
-| A2A Protocol | https://github.com/google/A2A |
+| A2A Protocol (v1.0, docs) | https://a2a-protocol.org/latest/ |
+| A2A Protocol (repo) | https://github.com/a2aproject/A2A |
+| A2A v1.0 / 1-year milestone | https://www.linuxfoundation.org/press/a2a-protocol-surpasses-150-organizations-lands-in-major-cloud-platforms-and-sees-enterprise-production-use-in-first-year |
 | MCP | https://modelcontextprotocol.io/ |
+| MCP 2026-07-28 release candidate | https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/ |
 | ANP (website) | https://agent-network-protocol.com/ |
 | ANP (GitHub) | https://github.com/agent-network-protocol/AgentNetworkProtocol |
 | W3C DID | https://www.w3.org/TR/did-core/ |
@@ -878,6 +918,7 @@ Neither replaces the other. A fully governed agentic deployment requires both.
 | EU AI Act | https://artificialintelligenceact.eu/ |
 | EU AI Act Art. 14 | https://artificialintelligenceact.eu/article/14/ |
 | EU AI Act Art. 12 | https://artificialintelligenceact.eu/article/12/ |
+| Digital Omnibus — Council final approval | https://www.consilium.europa.eu/en/press/press-releases/2026/06/29/artificial-intelligence-council-gives-final-green-light-to-simplify-and-streamline-rules/ |
 | GDPR | https://gdpr.eu/ |
 | CNCF | https://www.cncf.io/ |
 | CVE-2025-68664 (LangChain) | https://nvd.nist.gov/vuln/detail/CVE-2025-68664 |
@@ -890,9 +931,21 @@ Neither replaces the other. A fully governed agentic deployment requires both.
 | ISO 42001 | https://www.iso.org/standard/81230.html |
 | Kubernetes Service Accounts | https://kubernetes.io/docs/concepts/security/service-accounts/ |
 | NHI Breaches tracker | https://nhimg.org/nhi-breaches |
+| 2026 DBIR — identity as control plane for agentic AI | https://www.token.security/blog/the-2026-data-breach-investigations-report-confirms-it-identity-is-the-control-plane-for-agentic-ai |
+| AI agent security incidents 2026 (Kiteworks) | https://www.kiteworks.com/cybersecurity-risk-management/ai-agent-security-incidents-2026/ |
+| 2026 AI agent breach postmortems | https://beam.ai/agentic-insights/ai-agent-security-breaches-2026-lessons |
 
 ---
 
 *Proposed for industry discussion and collaborative refinement. The goal is to establish shared principles enabling safe, capable, and trustworthy persistent AI agents.*
 
 *The underlying framework represents original architectural thinking independent of any specific organizational deployment.*
+
+---
+
+## License
+
+- **Text of this document**: [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE) — share and adapt freely, including commercially, with attribution to the author.
+- **Code samples and policy templates** (YAML, JSON, Mermaid, and other snippets in this document): [MIT License](LICENSE-CODE) — so they can be embedded in implementations without CC obligations.
+
+**Suggested attribution**: Mihai-Ciprian Chezan, *Agent Identity & Lifecycle Framework (AILF)*, v2.1 (2026). https://github.com/MihaiCiprianChezan/Agentic-Global-Identity-Layer
