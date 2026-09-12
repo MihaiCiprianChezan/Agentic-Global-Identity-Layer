@@ -21,8 +21,6 @@
 
 ## **Reading Guide**
 
-This document uses Simplified Technical English (ASD-STE100), in the STE-flavored mode. Sentences are short. Each sentence states one idea. The document uses one word for one idea. It uses the active voice.
-
 The document keeps the hedges of its sources. If a source says "may" or "approximately", this document says the same. If a claim comes from one vendor only, the document says so.
 
 | If you want | Read |
